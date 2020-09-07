@@ -11,16 +11,18 @@ function getTextValue() {
 	$.get("/UserShortUrl",
 		{url : userTypeUrl},
 		function(data) {
-			if (data=="URL錯誤，請輸入正確的網址")
+			if (data.message=="URL錯誤，請輸入正確的網址")
 			{
-				document.getElementById("response").innerText = data;
+				document.getElementById("response").innerText = data.message;
 			}
 			else
 			{
 				BaseURL = getBaseURL()
-				completeURL = BaseURL + "/" + data
+				completeURL = BaseURL + "/" + data.url
 				document.getElementById("response").innerText = completeURL;
-				$("#response").attr("href",data); 
+				$("#response").attr("href",data.url); 
+				$("#previewImg").attr("src",data.image); 
+				document.getElementById("paragraph").innerText = data.paragraph;
 			}
 		}
 	);
