@@ -6,7 +6,6 @@ import sys
 import os
 import json
 from flask_sqlalchemy import SQLAlchemy
-import configparser
 import threading
 import datetime
 import os
@@ -14,10 +13,6 @@ from flask_migrate import Migrate
 from flask_cors import cross_origin,CORS
 import string
 import random
-config = configparser.ConfigParser()
-
-currentPath = os.path.dirname(os.path.abspath(__file__))
-
 #------------------------------------------------------------------------------------------------------
 app = Flask(__name__)
 CORS(app)
@@ -72,4 +67,4 @@ def redirect_to_url(url_key):
     return redirect(url.MappingURL)
 
 if __name__ == "__main__":
-	app.run(host='0.0.0.0',port=8000)
+	app.run(host='0.0.0.0',port=80)
