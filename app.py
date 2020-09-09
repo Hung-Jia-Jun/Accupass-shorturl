@@ -40,14 +40,13 @@ def index():
 @app.route("/UserShortUrl")
 def UserShortUrl():
 	_url = request.args.get('url')
-	regex = "(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
 	check_Url = re.findall('https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+', _url)
 	
 	#define return json format
 	res = {}
 	res["message"] = ""
 	res["url"] = ""
-	res["paragraph"] = ""
+	res["paragraph"] = "目前尚無可預覽文字"
 	res["image"] = ""
 
 	if len(check_Url) == 0:
@@ -76,42 +75,46 @@ def UserShortUrl():
 	# 2.網頁的前1/3的第一張圖片(連結)
 	#   2-1 : 因為網頁前面可能有一些網站icon雜圖
 	r = requests.get(_url)
-	r.encoding = 'utf-8' 
+	r.encoding = 'utf-8'
 	if r.status_code != 200 :
 		#雖然網址預覽失敗，但還是一樣縮網址給他
 		res["message"] = "網址預覽失敗"
 		res["url"] = compileURL
 	else:
 		soup = BeautifulSoup(r.text, 'lxml')
-		pageImgLength = len(soup.select('img'))
+		
+		imgTagLi = soup.select('img')
+		imgLi = []
+		for img in imgTagLi:
+			try:
+				if img["src"] != "":
+					imgLi.append(img["src"])
+			except KeyError:
+				pass
+		pageImgLength = len(imgLi)
 		previewImageIndex = int(pageImgLength/3)
-
-		imgLi = soup.select('img')
 
 		#檢查網頁前1/3的圖片是否有src的資訊，沒有的話就往下一張圖片找下去
 		#直到找到為止
-		for i in range(previewImageIndex):
+		for i in range(pageImgLength - previewImageIndex):
 			try:
+				url = imgLi[previewImageIndex + i]
 				#檢查圖片src有沒有空值，有的話就繼續往下找
-				if imgLi[previewImageIndex + i]["src"] != "":
-					res["image"] = imgLi[previewImageIndex + i]["src"]
+				if url!= "":
+					check_Url = re.findall('https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+', url)
+					if len(check_Url) > 0:
+						res["image"] = url
 					break
 				else:
 					continue
 			except KeyError:
 				pass
 		
-
-		#宣告一個負責儲存所有在文字序列的長度list
-		ItemsLen = []
-		for item in soup.findAll(text=True):
-			ItemsLen.append(len(item))
-		#尋找最長的一段文字長度是多少
-		totalTextLenMax = max(ItemsLen)
-
-		for item in soup.findAll(text=True):
-			if len(item) == totalTextLenMax:
-				res["paragraph"] = item
+		for item in soup.findAll('h1'):
+			text = item.text.replace("\n","").replace("\r","")
+			if text != "":
+				res["paragraph"] = text
+				break
 		res["message"] = "OK"
 		res["url"] = compileURL
 
