@@ -1,22 +1,17 @@
-# coding:utf-8
- 
+import flask
 import unittest
-import app
-import json
- 
- 
-class TestLogin(unittest.TestCase):
-    def setUp(self):
-        app.testing = True  
-        self.client = app.test_client()
+import flask_testing
+from app import app
     
-    def test_vaildurlshort(self):
-        response = self.client.post("/dologin", data={})
-        resp_json = response.data
-        resp_dict = json.loads(resp_json)
-        self.assertIn("code", resp_dict)
- 
-        code = resp_dict.get("code")
-        self.assertEqual(code, 1)
- 
- 
+class TestShortUrlApp(flask_testing.TestCase):
+    def create_app(self):
+        return app
+    def test_get_shortUrl_index(self):
+        with app.test_client() as lTestClient:
+            resp = lTestClient.get('/')
+            self.assertEqual(resp.status_code, 200)
+            print (resp.data)
+            self.assertContains(resp.text, "已幫您將網址轉換為")
+
+if __name__ == "__main__":
+    unittest.main()

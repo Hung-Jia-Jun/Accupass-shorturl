@@ -7,3 +7,5 @@ python3 -m pip install Flask-SQLAlchemy==2.4.1
 python3 -m pip install pytest
 python -m pip install bs4
 python -m pip install requests
+python3 -m pip install pytest
+python3 -m pip install flask_testing
