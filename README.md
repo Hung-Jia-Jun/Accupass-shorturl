@@ -29,7 +29,7 @@
 docker load --input accupass.tar
 
 # Run Docker image
-docker run -d -p 80:80 jason/accupass
+docker run -d -p 80:8000 jason/accupass
 
 the service will be automatic running on http://0.0.0.0/
 http://0.0.0.0/ is the short url service
