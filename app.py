@@ -81,7 +81,7 @@ def UserShortUrl():
 		res["message"] = "網址預覽失敗"
 		res["url"] = compileURL
 	else:
-		soup = BeautifulSoup(r.text, 'lxml')
+		soup = BeautifulSoup(r.text, 'html.parser')
 		
 		imgTagLi = soup.select('img')
 		imgLi = []
@@ -134,4 +134,4 @@ def redirect_to_url(url_key):
     return redirect(url.MappingURL)
 
 if __name__ == "__main__":
-	app.run(host='0.0.0.0',port=80)
+	app.run(host='0.0.0.0',port=8000)
