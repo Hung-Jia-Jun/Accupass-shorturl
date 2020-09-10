@@ -17,6 +17,8 @@
     * 顯示src內容
   * else:
     * 往下尋找下一個
+  * finally:
+    * 無法預覽圖片，回傳空的url
 2. 預覽文字
   * 偵測該頁面是否含有標題 <h1>  
   * 有的話就檢查text是否為空
@@ -24,7 +26,8 @@
     * 顯示h1.text內容
   * else:
     * 往下尋找下一個
-
+  * finally:
+    * 無法預覽文字，回傳 “目前尚無可預覽文字”
 # Download Docker image
 [accupass.tar](https://drive.google.com/file/d/1bBFtDLkEMEkxRzS-cFE2Aa5A6bJKHsDl/view?usp=sharing)
 # load docker image from local file
@@ -33,5 +36,5 @@ docker load --input accupass.tar
 # Run Docker image
 docker run -d -p 80:8000 jason/accupass
 
-the service will be automatic running on http://0.0.0.0/
-http://0.0.0.0/ is the short url service
+#### the service will be automatic running on http://0.0.0.0/
+#### http://0.0.0.0/ is the short url service
