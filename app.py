@@ -51,8 +51,8 @@ def UserShortUrl():
 
 	if len(check_Url) == 0:
 		res["message"] = "URL錯誤，請輸入正確的網址"
-		res["url"] = None
-		res_json = json.loads(json.dumps(res, ensure_ascii=False))
+		res["url"] = ""
+		res_json = json.dumps(res, ensure_ascii=False)
 		return Response(response=res_json,
 				status=200,
 				mimetype="application/json")
